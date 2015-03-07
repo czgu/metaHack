@@ -14,6 +14,14 @@ from .models import Picture
 # Create your views here.
 @csrf_exempt
 def image_handler(request):
+
+    possibe_food = set([
+        'apple',
+        'banana',
+        'carrot',
+        'broccoli'
+    ])
+
     if request.method != 'POST':
         raise Http404('wrong method')
     else:
@@ -30,9 +38,15 @@ def image_handler(request):
             r_url = 'https://api.imagga.com/v1/tagging?url=' + image_path
 
             r = requests.get(r_url, auth=auth)
-            print r.json()
+            if r.status_code < 400:
+                foods = r.json()['results']['tags']
+                for food in foods:
+                    if food['tag'] in possibe_food:
+                        return JsonResponse({'food': food['tag']})
 
-            return JsonResponse({'upload': 'success'})
+                return JsonResponse({'food': foods[0]['tag']})
+            else:
+                raise Http404('Imagga error occured')
 
     raise Http404('Unknown error occured')
 
