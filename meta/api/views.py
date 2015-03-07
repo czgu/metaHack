@@ -74,6 +74,14 @@ def recipe_handler(request):
             else:
                 instruction = recipe['Instructions'].replace('\n', ' ').replace('\r', '')
                 instructions = instruction.split('.')
+                instructions = map(
+                    lambda sentence: sentence.strip(),
+                    instructions
+                )
+                instructions = filter(
+                    lambda s: not s.isspace(),
+                    instructions
+                )
                 processed_results['Instructions'] = instructions
                 processed_results['Ingredient'] = map(
                     lambda ingredient: ingredient['Name'],
