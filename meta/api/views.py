@@ -41,7 +41,7 @@ def image_handler(request):
             if r.status_code < 400:
                 data = r.json()
                 print data
-                foods = data['results']['tags']
+                foods = data['results'][0]['tags']
                 for food in foods:
                     if food['tag'] in possibe_food:
                         return JsonResponse({'food': food['tag']})
