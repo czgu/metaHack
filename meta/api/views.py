@@ -39,7 +39,9 @@ def image_handler(request):
 
             r = requests.get(r_url, auth=auth)
             if r.status_code < 400:
-                foods = r.json()['results']['tags']
+                data = r.json()
+                print data
+                foods = data['results']['tags']
                 for food in foods:
                     if food['tag'] in possibe_food:
                         return JsonResponse({'food': food['tag']})
