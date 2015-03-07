@@ -5,6 +5,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sites.shortcuts import get_current_site
 
+import requests
+
 from .forms import UploadImageForm
 from .models import Picture
 
@@ -21,6 +23,14 @@ def image_handler(request):
         if form.is_valid():
             newpic = Picture(image=request.FILES['image'])
             newpic.save()
+
+            auth = ('acc_2569f28daa2ca36', '5f3d54692a4dcdeda460024d50505ecd')
+            image_path = \
+                'http://' + current_site + '/media/' + newpic.image.name
+            r_url = 'https://api.imagga.com/v1/tagging?url=' + image_path
+
+            r = requests.get(r_url, auth=auth)
+            print r.json()
 
             return JsonResponse({'upload': 'success'})
 
