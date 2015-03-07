@@ -62,7 +62,7 @@ def recipe_handler(request):
 
     if query:
         r_url = 'http://api.bigoven.com/recipe/%s?api_key=dvx4Bf83RbNOha0Re4c8ZYaTAe0X3hRj' % str(query)
-        r = request.get(r_url, headers={"Accept": "application/json"})
+        r = requests.get(r_url, headers={"Accept": "application/json"})
 
         if r.status_code < 400:
             recipe = r.json()
