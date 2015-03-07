@@ -20,7 +20,8 @@ def image_handler(request):
         'banana',
         'carrot',
         'broccoli',
-        'pear'
+        'pear',
+        'watermelon'
     ])
 
     if request.method != 'POST':
@@ -58,4 +59,26 @@ def recipe_handler(request):
     if request.method != 'POST':
         return Http404('wrong method')
 
+
+def list_handler(request):
+    if request.method != 'GET':
+        return Http404('Wrong method')
+    query = request.GET['name']
+
+    if query:
+        r_url = 'http://api.bigoven.com/recipes?title_kw=%s&api_key=dvx4Bf83RbNOha0Re4c8ZYaTAe0X3hRj&pg=1&rpp=3' % query
+
+    r = requests.get(r_url, headers={"Accept": "application/json"})
+
+    if r.status_code < 400:
+        results = r.json()['Results']
+
+        processed_results = map(
+            lambda recipe: {'title': recipe['Title'], 'id': recipe['RecipeID']},
+            results
+        )
+
+        return JsonResponse({'result': processed_results})
+
+    return Http404('Unknown error occured')
 
