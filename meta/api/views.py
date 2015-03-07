@@ -56,8 +56,31 @@ def image_handler(request):
 
 
 def recipe_handler(request):
-    if request.method != 'POST':
+    if request.method != 'GET':
         return Http404('wrong method')
+    query = request.GET['id']
+
+    if query:
+        r_url = 'http://api.bigoven.com/recipe/%s?api_key=dvx4Bf83RbNOha0Re4c8ZYaTAe0X3hRj' % str(query)
+        r = request.get(r_url, headers={"Accept": "application/json"})
+
+        if r.status_code < 400:
+            recipe = r.json()
+
+            processed_results = {}
+
+            if 'Instructions' not in recipe:
+                return JsonResponse({'error': 'Instructions not found'})
+            else:
+                instruction = recipe['Instructions'].replace('\n', ' ').replace('\r', '')
+                instructions = instruction.split('.')
+                processed_results['Instructions'] = instructions
+                processed_results['Ingredient'] = map(
+                    lambda ingredient: ingredient['name'],
+                    recipe['Ingredients']
+                )
+                return JsonResponse(processed_results)
+    raise Http404('Unknown error occured')
 
 
 def list_handler(request):
@@ -67,18 +90,17 @@ def list_handler(request):
 
     if query:
         r_url = 'http://api.bigoven.com/recipes?title_kw=%s&api_key=dvx4Bf83RbNOha0Re4c8ZYaTAe0X3hRj&pg=1&rpp=3' % query
+        r = requests.get(r_url, headers={"Accept": "application/json"})
 
-    r = requests.get(r_url, headers={"Accept": "application/json"})
+        if r.status_code < 400:
+            results = r.json()['Results']
 
-    if r.status_code < 400:
-        results = r.json()['Results']
+            processed_results = map(
+                lambda recipe: {'title': recipe['Title'], 'id': recipe['RecipeID']},
+                results
+            )
 
-        processed_results = map(
-            lambda recipe: {'title': recipe['Title'], 'id': recipe['RecipeID']},
-            results
-        )
-
-        return JsonResponse({'result': processed_results})
+            return JsonResponse({'result': processed_results})
 
     return Http404('Unknown error occured')
 
