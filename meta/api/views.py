@@ -19,7 +19,8 @@ def image_handler(request):
         'apple',
         'banana',
         'carrot',
-        'broccoli'
+        'broccoli',
+        'pear'
     ])
 
     if request.method != 'POST':
