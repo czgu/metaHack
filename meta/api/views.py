@@ -26,7 +26,7 @@ def image_handler(request):
 
             auth = ('acc_2569f28daa2ca36', '5f3d54692a4dcdeda460024d50505ecd')
             image_path = \
-                'http://' + current_site + '/media/' + newpic.image.name
+                'http://' + str(current_site) + '/media/' + str(newpic.image.name)
             r_url = 'https://api.imagga.com/v1/tagging?url=' + image_path
 
             r = requests.get(r_url, auth=auth)
