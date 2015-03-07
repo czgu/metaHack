@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import Http404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.sites.shortcuts import get_current_site
 
 from .forms import UploadImageForm
 from .models import Picture
@@ -15,7 +16,8 @@ def image_handler(request):
         raise Http404('wrong method')
     else:
         form = UploadImageForm(request.POST, request.FILES)
-        print request.FILES
+        current_site = get_current_site(request)
+        print current_site
         if form.is_valid():
             newpic = Picture(image=request.FILES['image'])
             newpic.save()
