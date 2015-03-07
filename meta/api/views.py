@@ -79,7 +79,7 @@ def recipe_handler(request):
                     instructions
                 )
                 instructions = filter(
-                    lambda s: not s.isspace(),
+                    lambda s: not s.isspace() and s,
                     instructions
                 )
                 processed_results['Instructions'] = instructions
