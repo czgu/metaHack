@@ -76,7 +76,7 @@ def recipe_handler(request):
                 instructions = instruction.split('.')
                 processed_results['Instructions'] = instructions
                 processed_results['Ingredient'] = map(
-                    lambda ingredient: ingredient['name'],
+                    lambda ingredient: ingredient['Name'],
                     recipe['Ingredients']
                 )
                 return JsonResponse(processed_results)
