@@ -34,7 +34,7 @@ def image_handler(request):
             newpic = Picture(image=request.FILES['image'])
             newpic.save()
 
-            auth = ('acc_2569f28daa2ca36', '5f3d54692a4dcdeda460024d50505ecd')
+            auth = ('some_account', 'some_key')
             image_path = \
                 'http://' + str(current_site) + '/media/' + str(newpic.image.name)
             r_url = 'https://api.imagga.com/v1/tagging?url=' + image_path
@@ -61,7 +61,7 @@ def recipe_handler(request):
     query = request.GET['id']
 
     if query:
-        r_url = 'http://api.bigoven.com/recipe/%s?api_key=dvx4Bf83RbNOha0Re4c8ZYaTAe0X3hRj' % str(query)
+        r_url = 'http://api.bigoven.com/recipe/%s?api_key=some_api_key' % str(query)
         r = requests.get(r_url, headers={"Accept": "application/json"})
 
         if r.status_code < 400:
@@ -97,7 +97,7 @@ def list_handler(request):
     query = request.GET['name']
 
     if query:
-        r_url = 'http://api.bigoven.com/recipes?title_kw=%s&api_key=dvx4Bf83RbNOha0Re4c8ZYaTAe0X3hRj&pg=1&rpp=3' % query
+        r_url = 'http://api.bigoven.com/recipes?title_kw=%s&api_key=some_api_key&pg=1&rpp=3' % query
         r = requests.get(r_url, headers={"Accept": "application/json"})
 
         if r.status_code < 400:
